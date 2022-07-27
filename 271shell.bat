@@ -1,3 +1,4 @@
+@set _shellstart=true
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::                                                        ::
@@ -22,8 +23,8 @@
 :init    rem Initializes the shell
 @echo off & setlocal EnableDelayedExpansion
 cls
-if "%~1"=="" (title 271-Shell) else (title %~1)
-set _ver=2.0
+if "%_shellstart%"=="true" (set _shellstart=false&&if "%~1"=="" (title 271-Shell) else (title %~1))
+set _ver=2.1
 set sessionID=%random%%random%%random%%random%%random%
 pushd %homepath%
 set _path=~
