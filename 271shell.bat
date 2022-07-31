@@ -10,8 +10,8 @@
 ::     don't work yet.                                    ::
 ::                                                        ::
 ::     You can start the shell with a different           ::
-::     title by passing in one argument. The              ::
-::     string doesn't need "".                            ::
+::     starting path by passing in one argument.          ::
+::     The path does need "" (quotation marks).           ::
 ::                                                        ::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -23,11 +23,10 @@
 :init    rem Initializes the shell
 @echo off & setlocal EnableDelayedExpansion
 cls
-if "%_shellstart%"=="true" (set _shellstart=false&&if "%~1"=="" (title 271-Shell) else (title %~1))
-set _ver=2.1
+title 271-Shell
+if "%_shellstart%"=="true" (set _shellstart=false&&if "%~1"=="" (pushd %homepath%&&set _path=~) else if "%~1"=="~" (pushd %homepath%&&set _path=~) else (pushd %~1&&set _path= %cd%))
+set _ver=2.2
 set sessionID=%random%%random%%random%%random%%random%
-pushd %homepath%
-set _path=~
 echo 271-Shell v%_ver%
 echo Made by MarioS271
 ver
@@ -39,6 +38,7 @@ if "%cd%"=="%userprofile%" (set _path=~) else (set _path= %cd%)
 echo.
 rem The color combinations weren't made by me. You can find them at 'https://stackoverflow.com/questions/2048509/how-to-echo-with-different-colors-in-the-windows-command-line'
 set /p cmd=([92m%username%@%computername%[0m) $[94m%_path%[0m ^> 
+
 ::::::::::::::
 rem Checks for special commands
 if "%cmd%"=="cmd" pushd %userprofile%&&start cmd.exe&&popd&&goto commandln
@@ -53,6 +53,12 @@ if "%cmd%"=="color" %windir%\System32\msg.exe %username% This command isn't avai
 if "%cmd%"=="color /?" %windir%\System32\msg.exe %username% This command isn't available in this shell.&&goto commandln
 if "%cmd%"=="color -?" %windir%\System32\msg.exe %username% This command isn't available in this shell.&&goto commandln
 if "%cmd%"=="help color" %windir%\System32\msg.exe %username% This command isn't available in this shell.&&goto commandln
+if "%cmd%"=="color help" %windir%\System32\msg.exe %username% This command isn't available in this shell.&&goto commandln
+if "%cmd%"=="color /h" %windir%\System32\msg.exe %username% This command isn't available in this shell.&&goto commandln
+if "%cmd%"=="color -h" %windir%\System32\msg.exe %username% This command isn't available in this shell.&&goto commandln
+if "%cmd%"=="color /help" %windir%\System32\msg.exe %username% This command isn't available in this shell.&&goto commandln
+if "%cmd%"=="color -help" %windir%\System32\msg.exe %username% This command isn't available in this shell.&&goto commandln
+if "%cmd%"=="color h" %windir%\System32\msg.exe %username% This command isn't available in this shell.&&goto commandln
 if "%cmd%"=="help" echo BUILT-IN:&&echo SESSION        Manages the 271shell session, type 'session help' for more help.&&echo.&&%windir%\System32\help.exe&&set _cmdcancel=true
 if "%cmd%"=="session" call :session help&&goto commandln
 if "%cmd%"=="session help" call :session help&&goto commandln
