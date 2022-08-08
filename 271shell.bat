@@ -24,8 +24,10 @@
 @echo off & setlocal EnableDelayedExpansion
 cls
 title 271-Shell
-if "%_shellstart%"=="true" (set _shellstart=false&&if "%~1"=="" (pushd %homepath%&&set _path=~) else if "%~1"=="~" (pushd %homepath%&&set _path=~) else (pushd %~1&&set _path= %cd%))
-set _ver=2.2
+if "%_shellstart%"=="true" (set _shellstart=false&&if "%~1"=="" (pushd %homepath%&&set _path=~&&set _originalpath=~) else (pushd %~1&&set _path= %cd%&&set _originalpath=%~1)&&call :_skippathcheck)
+if "%_originalpath%"=="~" (pushd %homepath%&&set _path=~) else (pushd %_originalpath%&&set _path= %cd%)
+:_skippathcheck
+set _ver=2.3
 set sessionID=%random%%random%%random%%random%%random%
 echo 271-Shell v%_ver%
 echo Made by MarioS271
@@ -38,7 +40,6 @@ if "%cd%"=="%userprofile%" (set _path=~) else (set _path= %cd%)
 echo.
 rem The color combinations weren't made by me. You can find them at 'https://stackoverflow.com/questions/2048509/how-to-echo-with-different-colors-in-the-windows-command-line'
 set /p cmd=([92m%username%@%computername%[0m) $[94m%_path%[0m ^> 
-
 ::::::::::::::
 rem Checks for special commands
 if "%cmd%"=="cmd" pushd %userprofile%&&start cmd.exe&&popd&&goto commandln
